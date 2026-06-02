@@ -1,0 +1,53 @@
+name: Deployment Script
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency: ${{ inputs.environment }}
+    environment:
+      name: ${{ inputs.environment }}
+
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install MBT
+        run: npm install -g mbt
+
+      - name: Build project
+        run: npm run build
+
+      - name: Install CF CLI
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo gpg --dearmor -o /usr/share/keyrings/cli.cloudfoundry.org.gpg
+          echo "deb [signed-by=/usr/share/keyrings/cli.cloudfoundry.org.gpg] https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf8-cli
+          cf install-plugin multiapps -f
+
+      - name: CF Login
+        run: |
+          cf api ${{ vars.CF_API }}
+          cf auth ${{ secrets.CF_USERNAME }} ${{ secrets.CF_PASSWORD }} --origin ${{ vars.CF_ORIGIN }}
+          cf target -o "${{ vars.CF_ORG }}" -s "${{ vars.CF_SPACE }}"
+
+      - name: Deploy
+        if: success()
+        run: npm run deploy

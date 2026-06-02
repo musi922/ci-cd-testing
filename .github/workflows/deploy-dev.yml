@@ -1,0 +1,17 @@
+name: Deploy to DEV
+
+on:
+  push:
+    branches:
+      - develop
+    paths-ignore:
+      - '.vscode/**'
+      - 'docs/**'
+      - 'README.md'
+
+jobs:
+  call-deploy-dev:
+    uses: ./.github/workflows/deployment_script.yml
+    with:
+      environment: dev
+    secrets: inherit

@@ -1,0 +1,47 @@
+name: PR Conventional Commit Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+env:
+  ticket_notice_text: This PR is based on Jira Ticket
+  ticket_key_regex: '${{ vars.PR_TICKET_KEY_REGEX }}'
+  ticket_to_link_regex_search: '${{ vars.TICKET_TO_LINK_REGEX_SEARCH }}'
+  ticket_to_link_regex_replace: '${{ vars.TICKET_TO_LINK_REPLACE }}'
+  pull_request_body: ${{ github.event.pull_request.body }}
+  pull_request_number: ${{ github.event.pull_request.number }}
+  pull_request_title: ${{ github.event.pull_request.title }}
+
+jobs:
+  validate-pr-title:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: read
+      statuses: read
+      actions: read
+      repository-projects: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: PR Conventional Commit Validation
+        uses: ytanikin/PRConventionalCommits@1.3.0
+        with:
+          task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
+          ticket_key_regex: ${{ env.ticket_key_regex }}
+          custom_labels: '{"feat":"feature","fix":"fix","docs":"documentation","test":"test","ci":"CI/CD","refactor":"refactor","perf":"performance","chore":"chore","revert":"revert"}'
+
+      - name: Create Jira Ticket Link in PR body
+        if: ${{ !contains(github.event.pull_request.body, env.ticket_notice_text) }}
+        run: |
+          echo "${{ env.ticket_notice_text }}: ${{ env.pull_request_title }}" > notes.txt
+          sed -E 's`${{ env.ticket_to_link_regex_search }}`${{ env.ticket_to_link_regex_replace }}`g' notes.txt > modified_notes.txt
+          echo "" >> modified_notes.txt
+          echo "${{ env.pull_request_body }}" >> modified_notes.txt
+          gh pr edit ${{ env.pull_request_number }} --body-file modified_notes.txt
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

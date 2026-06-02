@@ -1,0 +1,17 @@
+name: Deploy to KON
+
+on:
+  push:
+    branches:
+      - release
+    paths-ignore:
+      - '.vscode/**'
+      - 'docs/**'
+      - 'README.md'
+
+jobs:
+  call-deploy-kon:
+    uses: ./.github/workflows/deployment_script.yml
+    with:
+      environment: kon
+    secrets: inherit

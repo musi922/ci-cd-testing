@@ -1,0 +1,13 @@
+name: Deploy to PROD
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  call-deploy-prod:
+    uses: ./.github/workflows/deployment_script.yml
+    with:
+      environment: prod
+    secrets: inherit
