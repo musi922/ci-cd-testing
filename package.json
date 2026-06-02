@@ -1,0 +1,48 @@
+{
+  "name": "ewe",
+  "version": "1.0.0",
+  "description": "CAP Service",
+  "repository": "tbd later",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap-cloud-sdk/connectivity": "^4.7.0",
+    "@sap-cloud-sdk/http-client": "^4",
+    "@sap-cloud-sdk/resilience": "^4",
+    "@sap/cds": "^8.9.10",
+    "express": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^8"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch": "cds watch",
+    "build": "cds build --production"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "cds": {
+    "requires": {
+      "SUE_S4H": {
+        "kind": "odata-v4",
+        "model": "srv/external/SUE_S4H",
+        "credentials": {
+          "destination": "SUE",
+          "path": "/sap/opu/odata/sap/CDSALLVIEWS/"
+        }
+      },
+      "db": {
+        "kind": "sql"
+      },
+      "[production]": {
+        "db": {
+          "kind": "hana",
+          "deploy-format": "hdbtable"
+        }
+      }
+    }
+  }
+}

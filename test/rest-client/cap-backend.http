@@ -1,0 +1,3 @@
+### Alle Masseinheiten aus CAP Service abrufen
+GET http://localhost:4004/odata/v4/ewe-ui/Units
+Accept: application/json

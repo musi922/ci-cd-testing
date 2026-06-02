@@ -1,0 +1,3 @@
+### Verbindung zum SAP-ABAP-Backend über CAP prüfen
+GET http://localhost:4004/odata/v4/ewe/UnitsOfMeasure
+Accept: application/json
