@@ -41,7 +41,8 @@ jobs:
       - name: Create Jira Ticket Link in PR body
         if: ${{ !contains(github.event.pull_request.body, env.ticket_notice_text) }}
         run: |
-          echo "${{ env.ticket_notice_text }}: ${{ env.pull_request_title }}" > notes.txt
+          TICKET=$(echo "${{ env.pull_request_title }}" | grep -oP 'BTP-[0-9]+' | head -1)
+          echo "${{ env.ticket_notice_text }}: $TICKET" > notes.txt
           sed -E 's`${{ env.ticket_to_link_regex_search }}`${{ env.ticket_to_link_regex_replace }}`g' notes.txt > modified_notes.txt
           echo "" >> modified_notes.txt
           echo "${{ env.pull_request_body }}" >> modified_notes.txt
