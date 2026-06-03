@@ -20,15 +20,23 @@ modules:
     build-parameters:
       builder: npm-ci
     provides:
-      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+      - name: srv-api
         properties:
           srv-url: ${default-url}
     requires:
-      - name: ewe-destination
+      - name: ewe-auth
 
 resources:
-  - name: ewe-destination
+  - name: ewe-auth
     type: org.cloudfoundry.managed-service
     parameters:
-      service: destination
-      service-plan: lite
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: ewe-${org}-${space}
+        tenant-mode: dedicated
+        oauth2-configuration:
+          credential-types:
+            - "binding-secret"
+            - "x509"
