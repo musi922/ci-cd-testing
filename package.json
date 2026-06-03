@@ -10,7 +10,9 @@
     "@sap-cloud-sdk/http-client": "^4",
     "@sap-cloud-sdk/resilience": "^4",
     "@sap/cds": "^8.9.10",
-    "express": "^4"
+    "express": "^4",
+    "hdb": "^0.19.12",
+    "@sap/xssec": "^4"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",
@@ -24,13 +26,13 @@
     "eslint-plugin-yml": "^3.4.0",
     "globals": "^17.6.0"
   },
-"scripts": {
-  "start": "cds-serve",
-  "watch": "cds watch",
-  "build": "mbt build",
-  "lint": "eslint .",
-  "deploy": "cf deploy mta_archives/*.mtar -f"
-},
+  "scripts": {
+    "start": "cds-serve",
+    "watch": "cds watch",
+    "build": "mbt build",
+    "lint": "eslint .",
+    "deploy": "cf deploy mta_archives/*.mtar -f"
+  },
   "engines": {
     "node": ">=20"
   },
@@ -51,7 +53,8 @@
         "db": {
           "kind": "hana",
           "deploy-format": "hdbtable"
-        }
+        },
+        "auth": "xsuaa"
       }
     }
   }
