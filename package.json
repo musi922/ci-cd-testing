@@ -27,7 +27,7 @@
 "scripts": {
   "start": "cds-serve",
   "watch": "cds watch",
-  "build": "cds build --production",
+  "build": "mbt build",
   "lint": "eslint .",
   "deploy": "cf deploy mta_archives/*.mtar -f"
 },
