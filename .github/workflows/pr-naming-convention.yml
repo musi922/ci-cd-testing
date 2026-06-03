@@ -29,7 +29,7 @@ jobs:
 
       - name: PR Conventional Commit Validation
         run: |
-          TITLE="${{ github.event.pull_request.title }}"
+          TITLE=$(echo "${{ github.event.pull_request.title }}" | xargs)
           echo "PR Title: $TITLE"
           if ! echo "$TITLE" | grep -qP '^\[BTP-[0-9]+\]\s+(feat|fix|docs|test|ci|refactor|perf|chore|revert)\([^)]+\):\s+.+'; then
             echo "Invalid PR title: $TITLE"
