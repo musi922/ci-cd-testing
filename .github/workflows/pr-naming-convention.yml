@@ -31,9 +31,11 @@ jobs:
         run: |
           TITLE=$(echo "${{ github.event.pull_request.title }}" | xargs)
           echo "PR Title: $TITLE"
-          if ! echo "$TITLE" | grep -qP '^\[BTP-[0-9]+\]\s+(feat|fix|docs|test|ci|refactor|perf|chore|revert)\([^)]+\):\s+.+'; then
+          if ! echo "$TITLE" | grep -qP '^\[BTP-[0-9]+\]\s+(feat|fix|docs|test|ci|refactor|perf|chore|revert)\([^)]+\):\s+.+|^release\/v[0-9]+\.[0-9]+\.[0-9]+(\s+→\s+main)?$'; then
             echo "Invalid PR title: $TITLE"
             echo "Expected format: [BTP-42] feat(scope): description"
+            echo "              or: release/v1.2.0"
+            echo "              or: release/v1.2.0 → main"
             exit 1
           fi
           echo "PR title valid."
