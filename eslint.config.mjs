@@ -8,16 +8,17 @@ import cds from "@sap/eslint-plugin-cds";
 
 export default [
   {
-    ignores: [
-      "app/*/dist/**",
-      "app/**/test/**",
-      "app/**/localService/**",
-      "eslint.config.mjs",
-      "gen/**",
-      "test/**",
-      "srv/external/**",
-      "srv/backend-service/**"
-    ],
+  ignores: [
+    "app/*/dist/**",
+    "app/**/test/**",
+    "app/**/localService/**",
+    "eslint.config.mjs",
+    "commitlint.config.js",
+    "gen/**",
+    "test/**",
+    "srv/external/**",
+    "srv/backend-service/**",
+  ],  
   },
   {
     languageOptions: { sourceType: "commonjs" },

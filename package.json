@@ -10,12 +10,14 @@
     "@sap-cloud-sdk/http-client": "^4",
     "@sap-cloud-sdk/resilience": "^4",
     "@sap/cds": "^8.9.10",
+    "@sap/xssec": "^4",
     "express": "^4",
-    "hdb": "^0.19.12",
-    "@sap/xssec": "^4"
+    "hdb": "^0.19.12"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
     "@eslint-community/eslint-plugin-eslint-comments": "^4.7.2",
     "@eslint/js": "^9.39.4",
     "@sap/cds-dk": "^8",
@@ -24,18 +26,25 @@
     "eslint-plugin-markdown": "^5.1.0",
     "eslint-plugin-regexp": "^3.1.0",
     "eslint-plugin-yml": "^3.4.0",
-    "globals": "^17.6.0"
+    "globals": "^17.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0"
   },
   "scripts": {
     "start": "cds-serve",
     "watch": "cds watch",
     "build": "mbt build",
     "lint": "eslint .",
-    "deploy": "cf deploy mta_archives/*.mtar -f"
+    "deploy": "cf deploy mta_archives/*.mtar -f",
+    "prepare": "husky"
   },
   "engines": {
     "node": ">=20"
   },
+  "lint-staged": {
+  "*.js": "eslint --fix",
+  "*.cds": "eslint --fix"
+},
   "cds": {
     "requires": {
       "SUE_S4H": {
